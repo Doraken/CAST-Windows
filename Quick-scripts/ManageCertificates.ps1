@@ -9,6 +9,7 @@ $CertSubjetCN = 'Dummy'
 $CertLenght   = '1024'
 $CertDuration = '1'
 $CertFqdn     = """www.contoso.com"""
+$cert         = ''
  
 function Write-Menu-Header 
 {
@@ -164,7 +165,23 @@ New-SelfSignedCertificate -Type Custom `
 -Signer $cert
 }
 
+function Get-certificate
+{
+$CertList = Get-ChildItem -Path “Cert:\CurrentUser\My” 
+$Counter = 0
+Write-Menu-Header "Certificate Select"
 
+foreach ($cert in $CertList) {
+   Write-Host $Counter " cetificate :" $cert.Subject
+   $counter++
+ }
+ Put-Spacer
+ $ItmVal = Read-Host -Prompt 'Select Certificate base CN name'
+ $global:CertTag = $CertList.Item($ItmVal).Subject
+ $global:CertThumbprint = $CertList.Item($ItmVal).Thumbprint
+ $Global:cert =  Get-ChildItem -Path "Cert:\CurrentUser\My\$global:CertThumbprint"
+ EnterToContinue $global:CertTag
+}
 
 function Main
 {
@@ -186,4 +203,5 @@ function Main
 }
 
 
-Main
+Get-certificate
+$Global:cert
