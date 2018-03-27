@@ -7,7 +7,7 @@
 #Var init
 $CertSubjetCN = 'Dummy'
 $CertLenght   = '1024'
-$CertDuration = '1'
+$Global:CertDuration = '1'
 $CertFqdn     = """www.contoso.com"""
 $cert         = ''
  
@@ -53,12 +53,12 @@ Put-Spacer
 $selection = Read-Host "Please make a selection"
      switch ($selection)
      {
-         '1' { $global:CertLenght = '1024'} 
-         '2' { $global:CertLenght = '2048'}
-         '3' { $global:CertLenght = '4096'}
+         '1' { $global:RootCertLenght = '1024'} 
+         '2' { $global:RootCertLenght = '2048'}
+         '3' { $global:RootCertLenght = '4096'}
          'Q' { exit 0 }
      }
-EnterToContinue $global:CertLenght
+EnterToContinue $global:RootCertLenght
 }
 
 function Set-KeyDuration
@@ -77,16 +77,16 @@ Put-Spacer
 $selection = Read-Host "Please make a selection"
      switch ($selection)
      {
-         '1' { $CertDuration = '1'} 
-         '2' { $CertDuration = '3'}
-         '3' { $CertDuration = '6'}
-         '4' { $CertDuration = '12'} 
-         '5' { $CertDuration = '24'}
-         '6' { $CertDuration = '36'}
-         '7' { $CertDuration = '48'} 
+         '1' { $Global:CertDuration = '1'} 
+         '2' { $Global:CertDuration = '3'}
+         '3' { $Global:CertDuration = '6'}
+         '4' { $Global:CertDuration = '12'} 
+         '5' { $Global:CertDuration = '24'}
+         '6' { $Global:CertDuration = '36'}
+         '7' { $Global:CertDuration = '48'} 
          'Q' { exit 0 }
      }
-EnterToContinue $CertDuration
+EnterToContinue $Global:CertDuration
 }
 
 function Set-CertNameCn
@@ -124,28 +124,30 @@ function Set-RootCert
 # -dnsname -DnsName domain.example.com,anothersubdomain.example.com
 # -Subject "CN=Patti Fuller,OU=UserAccounts,DC=corp,DC=contoso,DC=com" 
 Set-CertBaseVar
-$cert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
--Subject "$CertSubjetCN" `
+New-SelfSignedCertificate -Type Custom -KeySpec Signature `
+-Subject "$Global:CertSubjetCN" `
 -KeyExportPolicy Exportable `
--HashAlgorithm sha256 -KeyLength $CertLenght `
+-HashAlgorithm sha256 -KeyLength $Global:CertLenght `
 -CertStoreLocation "Cert:\CurrentUser\My" `
 -KeyUsageProperty Sign `
 -KeyUsage CertSign `
--NotAfter (Get-Date).AddYears($CertDuration)
-
+-NotAfter (Get-Date).AddYears($Global:CertDuration)
+main
 }
 
 
 function Set-ClientCert
 {
 Set-CertBaseVar
+Get-certificate
 # Generate certificates from root (For Client Authentication only) (Not for web server)
 New-SelfSignedCertificate -Type Custom -KeySpec Signature `
--Subject "$CertSubjetCN" -KeyExportPolicy Exportable `
--HashAlgorithm sha256 -KeyLength $CertLenght `
--NotAfter (Get-Date).AddMonths($CertDuration) `
+-Subject "$Global:CertSubjetCN" -KeyExportPolicy Exportable `
+-HashAlgorithm sha256 -KeyLength $Global:CertLenght `
+-NotAfter (Get-Date).AddMonths($Global:CertDuration) `
 -CertStoreLocation "Cert:\CurrentUser\My" `
--Signer $cert -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.2")
+-Signer $global:RootCert -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.2")
+main
 }
 
 
@@ -153,16 +155,18 @@ function Set-WebServiceCert
 {
 # Generate Web server self signet certificate
 Set-CertBaseVar
+Get-certificate
 Set-CertDomaineName 
  Generate certificate from root for web service
 New-SelfSignedCertificate -Type Custom `
--Subject "$CertSubjetCN" -KeyExportPolicy Exportable `
--DnsName $CertFqdn `
--HashAlgorithm sha256 -KeyLength $CertLenght `
+-Subject "$Global:CertSubjetCN" -KeyExportPolicy Exportable `
+-DnsName $Global:CertFqdn `
+-HashAlgorithm sha256 -KeyLength $Global:CertLenght `
 -KeyUsage "KeyEncipherment", "DigitalSignature" `
--NotAfter (Get-Date).AddMonths($CertDuration ) `
+-NotAfter (Get-Date).AddMonths($Global:CertDuration) `
 -CertStoreLocation "Cert:\CurrentUser\My" `
--Signer $cert
+-Signer $global:RootCert
+main
 }
 
 function Get-certificate
@@ -177,10 +181,21 @@ foreach ($cert in $CertList) {
  }
  Put-Spacer
  $ItmVal = Read-Host -Prompt 'Select Certificate base CN name'
- $global:CertTag = $CertList.Item($ItmVal).Subject
- $global:CertThumbprint = $CertList.Item($ItmVal).Thumbprint
- $Global:cert =  Get-ChildItem -Path "Cert:\CurrentUser\My\$global:CertThumbprint"
- EnterToContinue $global:CertTag
+ $global:RootCertTag = $CertList.Item($ItmVal).Subject
+ $global:RootCertThumbprint = $CertList.Item($ItmVal).Thumbprint
+ $global:RootCert =  Get-ChildItem -Path "Cert:\CurrentUser\My\$global:RootCertThumbprint"
+ EnterToContinue $global:RootCertTag
+ main
+}
+
+function Gel-CertList
+{
+ $Certlist = Get-ChildItem -Path “Cert:\CurrentUser\My”
+ $Certlist 
+ write-host "" 
+ write-host " Counted item : " $Certlist.count
+ EnterToContinue  
+ main
 }
 
 function Main
@@ -190,6 +205,7 @@ function Main
  Write-Host "1  Create Root Certificate."
  Write-Host "2  Create Web certificate."
  Write-Host "3  Create Client authentication certificates."
+ Write-Host "L  list all availlable certificates."
  Write-Host "Q: Press 'Q' to quit."
  Put-Spacer
  $selection = Read-Host "Please make a selection"
@@ -198,10 +214,10 @@ function Main
          '1' { Set-RootCert       } 
          '2' { Set-ClientCert     }
          '3' { Set-WebServiceCert }
+         'L' { Gel-CertList }
          'Q' { exit 0 }
      }
 }
 
 
-Get-certificate
-$Global:cert
+main
