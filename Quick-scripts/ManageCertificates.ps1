@@ -137,6 +137,7 @@ New-SelfSignedCertificate -Type Custom -KeySpec Signature `
 -KeyUsageProperty Sign `
 -KeyUsage CertSign `
 -NotAfter (Get-Date).AddYears($Global:CertDuration)
+$wait  = Read-Host -Prompt 'Press enter'
 main
 }
 
