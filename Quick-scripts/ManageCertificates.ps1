@@ -1,8 +1,11 @@
-﻿#####
-##
-# Author : Arnaud Crampet 
-# Mail   : Arnaud@crampet.net
-# Usage  : Manage selfsignet certificate
+﻿#####                                                          ####
+###                                                             ###
+##                                                               ##
+# Author           : Arnaud Crampet                               #
+# Mail             : Arnaud@crampet.net                           #
+# Usage            : Manage selfsigned certificate                #
+# Operating system : Windows 10 or windows server 2016            #
+###################################################################
 
 #Var init
 $CertSubjetCN = 'Dummy'
