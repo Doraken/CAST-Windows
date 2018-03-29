@@ -58,12 +58,12 @@ Put-Spacer
 $selection = Read-Host "Please make a selection"
      switch ($selection)
      {
-         '1' { $global:RootCertLenght = '1024'} 
-         '2' { $global:RootCertLenght = '2048'}
-         '3' { $global:RootCertLenght = '4096'}
+         '1' { $Global:CertLenght = '1024'} 
+         '2' { $Global:CertLenght = '2048'}
+         '3' { $Global:CertLenght = '4096'}
          'Q' { exit 0 }
      }
-EnterToContinue $global:RootCertLenght
+EnterToContinue $Global:CertLenght
 }
 
 function Set-KeyDuration
@@ -137,7 +137,7 @@ New-SelfSignedCertificate -Type Custom -KeySpec Signature `
 -KeyUsageProperty Sign `
 -KeyUsage CertSign `
 -NotAfter (Get-Date).AddYears($Global:CertDuration)
-$wait  = Read-Host -Prompt 'Press enter'
+#wait  = Read-Host -Prompt 'Press enter'
 main
 }
 
