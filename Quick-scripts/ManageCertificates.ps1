@@ -10,6 +10,8 @@ $CertLenght   = '1024'
 $Global:CertDuration = '1'
 $CertFqdn     = """www.contoso.com"""
 $cert         = ''
+$CertSavePath = "C:\cert"
+
  
 function Write-Menu-Header 
 {
@@ -204,12 +206,19 @@ function Get-CertList
 
 function Exp-ClientCert
 {
-
-
-
-
+Get-certificate
+If(!(test-path $CertSavePath))
+{
+New-Item -ItemType Directory -Force -Path $CertSavePath
 }
-
+$FnameBase =  $global:RootCert.Subject.Split("=").Item(1)
+$Fpath1 = $CertSavePath + "\" + $FnameBase + ".cer"
+$Fpath2 = $CertSavePath + "\" + $FnameBase + "x64.cer"
+Export-Certificate -Cert  $global:RootCert -FilePath $Fpath1 
+certutil -encode $Fpath1  $Fpath2
+explorer $CertSavePath
+}
+ 
 
 function Main
 {
