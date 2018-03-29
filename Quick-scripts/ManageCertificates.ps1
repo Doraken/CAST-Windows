@@ -14,7 +14,7 @@ $Global:CertDuration = '1'
 $CertFqdn     = """www.contoso.com"""
 $cert         = ''
 $CertSavePath = "C:\cert"
-
+$ClientCertPasswd = ConvertTo-SecureString -String "1234" -Force -AsPlainText
  
 function Write-Menu-Header 
 {
@@ -208,7 +208,7 @@ function Get-CertList
 }
 
 
-function Exp-ClientCert
+function Expt-RootCert
 {
 Get-certificate
 If(!(test-path $CertSavePath))
@@ -222,7 +222,19 @@ Export-Certificate -Cert  $global:RootCert -FilePath $Fpath1
 certutil -encode $Fpath1  $Fpath2
 explorer $CertSavePath
 }
- 
+
+function Exp-ClientCert
+{
+Get-certificate
+If(!(test-path $CertSavePath))
+{
+New-Item -ItemType Directory -Force -Path $CertSavePath
+}
+$FnameBase =  $global:RootCert.Subject.Split("=").Item(1)
+$Fpath1 = $CertSavePath + "\" + $FnameBase + "-client.Pfx"
+ Export-PfxCertificate -Cert  $global:RootCert -FilePath $Fpath1 -Password $ClientCertPasswd
+explorer $CertSavePath
+}
 
 function Main
 {
@@ -231,7 +243,8 @@ function Main
  Write-Host "1  Create Root Certificate."
  Write-Host "2  Create Web certificate."
  Write-Host "3  Create Client authentication certificates."
- Write-Host "4  export Client authentication certificates."
+ Write-Host "4  export Root authentication certificates (public key only )."
+ Write-Host "5  export Client authentication certificates (public and private key)."
  Write-Host "L  list all availlable certificates."
  Write-Host "Q: Press 'Q' to quit."
  Put-Spacer
@@ -241,7 +254,8 @@ function Main
          '1' { Set-RootCert       } 
          '2' { Set-WebServiceCert }
          '3' { Set-ClientCert     }
-         '4' { Exp-ClientCert     }
+         '4' { Expt-RootCert      }
+         '5' {  Exp-ClientCert    }
          'L' { Get-CertList       }
          'Q' { exit 0             }
      }
