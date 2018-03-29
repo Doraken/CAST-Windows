@@ -16,7 +16,7 @@ function Write-Menu-Header
  param (
         [string]$Title = 'My Menu'
     )
-#  Clear-Host
+   Clear-Host
     Write-Host "================ $Title ================"
     Write-Host ""
  }   
@@ -33,12 +33,12 @@ function EnterToContinue
  param (
         [string]$Value = 'Dummy'
     )
-#  Clear-Host
+ 
  Put-Spacer
  Write-Host "you choose : [ $Value ] "
  Put-Spacer
  $dummy = Read-Host -Prompt 'Press enter to continue or CTRL+C to end'
-#  Clear-Host
+ Clear-Host
  }
 
 function Set-KeyLenght
@@ -140,13 +140,14 @@ function Set-ClientCert
 {
 Set-CertBaseVar
 Get-certificate
-# Generate certificates from root (For Client Authentication only) (Not for web server)
-New-SelfSignedCertificate -Type Custom -KeySpec Signature `
+write-host " Generate certificates from root (For Client Authentication only) (Not for web server)"
+$ncert = New-SelfSignedCertificate -Type Custom -KeySpec Signature `
 -Subject "$Global:CertSubjetCN" -KeyExportPolicy Exportable `
 -HashAlgorithm sha256 -KeyLength $Global:CertLenght `
 -NotAfter (Get-Date).AddMonths($Global:CertDuration) `
 -CertStoreLocation "Cert:\CurrentUser\My" `
 -Signer $global:RootCert -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.2")
+EnterToContinue ""
 main
 }
 
@@ -157,8 +158,8 @@ function Set-WebServiceCert
 Set-CertBaseVar
 Get-certificate
 Set-CertDomaineName 
- Generate certificate from root for web service
-New-SelfSignedCertificate -Type Custom `
+write-host  "Generate certificate from root for web service"
+$ncert = New-SelfSignedCertificate -Type Custom `
 -Subject "$Global:CertSubjetCN" -KeyExportPolicy Exportable `
 -DnsName $Global:CertFqdn `
 -HashAlgorithm sha256 -KeyLength $Global:CertLenght `
@@ -166,6 +167,7 @@ New-SelfSignedCertificate -Type Custom `
 -NotAfter (Get-Date).AddMonths($Global:CertDuration) `
 -CertStoreLocation "Cert:\CurrentUser\My" `
 -Signer $global:RootCert
+EnterToContinue ""
 main
 }
 
@@ -185,11 +187,12 @@ foreach ($cert in $CertList) {
  $global:RootCertThumbprint = $CertList.Item($ItmVal).Thumbprint
  $global:RootCert =  Get-ChildItem -Path "Cert:\CurrentUser\My\$global:RootCertThumbprint"
  EnterToContinue $global:RootCertTag
- main
+ 
 }
 
-function Gel-CertList
+function Get-CertList
 {
+ Write-Menu-Header "Certificate List" 
  $Certlist = Get-ChildItem -Path “Cert:\CurrentUser\My”
  $Certlist 
  write-host "" 
@@ -198,6 +201,16 @@ function Gel-CertList
  main
 }
 
+
+function Exp-ClientCert
+{
+
+
+
+
+}
+
+
 function Main
 {
  Write-Menu-Header "Certificate Menu"
@@ -205,6 +218,7 @@ function Main
  Write-Host "1  Create Root Certificate."
  Write-Host "2  Create Web certificate."
  Write-Host "3  Create Client authentication certificates."
+ Write-Host "4  export Client authentication certificates."
  Write-Host "L  list all availlable certificates."
  Write-Host "Q: Press 'Q' to quit."
  Put-Spacer
@@ -212,10 +226,11 @@ function Main
      switch ($selection)
      {
          '1' { Set-RootCert       } 
-         '2' { Set-ClientCert     }
-         '3' { Set-WebServiceCert }
-         'L' { Gel-CertList }
-         'Q' { exit 0 }
+         '2' { Set-WebServiceCert }
+         '3' { Set-ClientCert     }
+         '4' { Exp-ClientCert     }
+         'L' { Get-CertList       }
+         'Q' { exit 0             }
      }
 }
 
