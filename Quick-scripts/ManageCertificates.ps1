@@ -216,11 +216,12 @@ If(!(test-path $CertSavePath))
 New-Item -ItemType Directory -Force -Path $CertSavePath
 }
 $FnameBase =  $global:RootCert.Subject.Split("=").Item(1)
-$Fpath1 = $CertSavePath + "\" + $FnameBase + ".cer"
-$Fpath2 = $CertSavePath + "\" + $FnameBase + "x64.cer"
+$Fpath1 = $CertSavePath + "\" + $FnameBase + "-Root.cer"
+$Fpath2 = $CertSavePath + "\" + $FnameBase + "x64-Root.cer"
 Export-Certificate -Cert  $global:RootCert -FilePath $Fpath1 
 certutil -encode $Fpath1  $Fpath2
 explorer $CertSavePath
+main
 }
 
 function Exp-ClientCert
@@ -234,6 +235,7 @@ $FnameBase =  $global:RootCert.Subject.Split("=").Item(1)
 $Fpath1 = $CertSavePath + "\" + $FnameBase + "-client.Pfx"
  Export-PfxCertificate -Cert  $global:RootCert -FilePath $Fpath1 -Password $ClientCertPasswd
 explorer $CertSavePath
+#main
 }
 
 function Main

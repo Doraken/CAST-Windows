@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="windows-1251" ?>
+<RootManagment>
+	<GlobalParam>
+		<Region>West Europe</Region>
+	</GlobalParam>
+	<TypePf ID="1" name="connectivity">
+		<Rgroups id="1">
+			<Obj id="1">
+				<TNameObj>vmRDSH</TNameObj>
+				<TypeObj>vm</TypeObj>
+				<NumberObj>2</NumberObj>
+				<AzrObj>Standard A1 v2</AzrObj>
+			</Obj>
+			<Obj id="2">
+				<TNameObj>vmbrks</TNameObj>
+				<TypeObj>vm</TypeObj>
+				<NumberObj>1</NumberObj>
+				<AzrObj>Standard A1 v2</AzrObj>
+			</Obj>
+			<Obj id="3">
+				<TNameObj>vmgws</TNameObj>
+				<TypeObj>vm</TypeObj>
+				<NumberObj>1</NumberObj>
+				<AzrObj>Standard A1 v2</AzrObj>
+			</Obj>
+			<Obj id="4">
+				<TNameObj>VMstore</TNameObj>
+				<TypeObj>VM</TypeObj>
+				<NumberObj>1</NumberObj>
+				<AzrObj>Standard A1 v2</AzrObj>
+			</Obj>
+			<Obj id="5"> 
+				<TNameObj>vmProxy</TNameObj>
+				<TypeObj>vm</TypeObj>
+				<NumberObj>2</NumberObj>
+				<AzrObj>Standard A1 v2</AzrObj>
+			</Obj>		
+			<Obj id="6">
+				<TNameObj>storage</TNameObj>
+				<TypeObj>sorage</TypeObj>
+				<NumberObj>1</NumberObj>
+				<AzrObj>Locally-redundant storage (LRS)</AzrObj>
+			</Obj>		
+		</Rgroups> 
+	</TypePf>
+</RootManagment>
