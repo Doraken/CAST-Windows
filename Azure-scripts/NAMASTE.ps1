@@ -13,7 +13,7 @@ $Global:subscriptionId = ""
 $SessionState = fasle 
 
 # Loadin basic configuration file ( profile and parameter for build)
-
+[xml]$XmlDocument = Get-Content -Path $XmlConfigFile
 
 function Write-Menu-Header 
 {
@@ -128,8 +128,6 @@ foreach ($AzLocation in $Global:AzureListLocations ) {
  EnterToContinue $Global:AzureSelectedLocationsName
 }
 
-
-
 function Select-RessourceGroup
 {
 $global:AzureRgroupList = Get-AzureRmResourceGroup
@@ -145,23 +143,47 @@ foreach ($Rgroup in $global:AzureRgroupList) {
  $global:AzureRgroupName = $global:AzureRgroupList.Item($ItmVal).ResourceGroupName
  $global:AzureRgroup = Get-AzureRmResourceGroup -name $global:AzureRgroupName
  EnterToContinue $global:AzureRgroupName
-
 }
 
 function Create-StorageAccount
 {
-Select-RessourceGroup
+param (
+        $Automated = 'manuel'
+    )
+if ($Automated -eq 'manuel' ) { Select-RessourceGroup
+Set-StorageAccountRedundency
+write-host "Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."
+$StorageAccountName = Read-Host -Prompt 'give name of new Storage Account' } else  { Write-Host "Automate mode" }
 
+write-host "Storage Account Name :" $StorageAccountName
+Write-Host "Type                 :" $global:AzureStorageAccountRedundency
+write-host "Resource Group Name  :" $global:AzureRgroup.ResourceGroupName
+write-host "Location             :" $global:AzureRgroup.Location 
 
-$StorageAccount = New-AzureRmStorageAccount -StorageAccountName $StorageAccountName -Type 'Standard_LRS' -ResourceGroupName $StorageResourceGroupName -Location "$ResourceGroupLocation"
+EnterToContinue ""
 
+$StorageAccount = New-AzureRmStorageAccount -StorageAccountName $StorageAccountName -Type $global:AzureStorageAccountRedundency -ResourceGroupName $global:AzureRgroup.ResourceGroupName -Location $global:AzureRgroup.Location
 
+}
+
+function Set-StorageAccountRedundency 
+{
+$global:AzureStorageAccountRedundencyList = $XmlDocument.RootManagment.ManagedElement.StorageAccountRedudency.StoAccRed
+$Counter = 0
+Write-Menu-Header "Storage account redundency Select"
+
+foreach ($RedLev in $global:AzureStorageAccountRedundencyList) {
+   Write-Host $Counter " Level :" $RedLev.Name
+   $counter++
+ }
+ Put-Spacer
+ $ItmVal = Read-Host -Prompt 'Select a redundency Level'
+ $global:AzureStorageAccountRedundency = $global:AzureStorageAccountRedundencyList.Item($ItmVal).AzureNAme
+ EnterToContinue $global:AzureStorageAccountRedundencyList.Item($ItmVal).Name
 
 }
 
 
-
-[xml]$XmlDocument = Get-Content -Path $XmlConfigFile
 
 
 $XmlDocument.RootManagment.TypePf.Rgroups.obj  
@@ -188,11 +210,12 @@ New-AzureRmResourceGroup -Name $resourceGroup -Location $location
 
 }
 
-
+## OK VALIDE
 #Set-AzureSession
 Write-Host "Please Wait until gathring of azure location is finished"
 $Global:AzureListLocations = Get-AzureRmLocation
+#Set-AsureLocation
+Create-StorageAccount manuel 
 
+#Create-StorageAccount
 
-Set-AsureLocation
-Select-RessourceGroup
