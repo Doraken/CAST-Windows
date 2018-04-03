@@ -43,4 +43,16 @@
 			</Obj>		
 		</Rgroups> 
 	</TypePf>
+	<ManagedElement>
+		<Location>
+			<Loc Name="Westen europe" AzureNAme="weurope" />
+		</Location>
+		<StorageAccountRedudency>
+			<StoAccRed AzureNAme="Standard_LRS"   Name="Locally-redundant storage."         />
+			<StoAccRed AzureNAme="Standard_ZRS"   Name="Zone-redundant storage."            />
+			<StoAccRed AzureNAme="Standard_GRS"   Name="Geo-redundant storage."             />
+			<StoAccRed AzureNAme="Standard_RAGRS" Name="Read access geo-redundant storage"  />
+			<StoAccRed AzureNAme="Premium_LRS"    Name="Premium locally-redundant storage." />
+		</StorageAccountRedudency>
+	</ManagedElement>
 </RootManagment>

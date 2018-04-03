@@ -12,7 +12,6 @@ $XmlConfigFile = "D:\arnau\Documents\GitHub\CAST-Windows\Azure-scripts\XmlTempla
 $Global:subscriptionId = ""
 $SessionState = fasle 
 
-
 # Loadin basic configuration file ( profile and parameter for build)
 
 
@@ -113,6 +112,23 @@ $selection = Read-Host "Please make a selection"
 EnterToContinue $Global:CertDuration
 }
 
+function Set-AsureLocation
+{
+$Counter = 0
+Write-Menu-Header "Azure Location Select"
+
+foreach ($AzLocation in $Global:AzureListLocations ) {
+   Write-Host $Counter " Azure Location :" $AzLocation.DisplayName
+   $counter++
+ }
+ Put-Spacer
+ $ItmVal = Read-Host -Prompt 'Select a Location'
+ $Global:AzureSelectedLocationsDName = $Global:AzureListLocations.Item($ItmVal).DisplayName
+ $Global:AzureSelectedLocationsName = $Global:AzureListLocations.Item($ItmVal).Location
+ EnterToContinue $Global:AzureSelectedLocationsName
+}
+
+
 
 function Select-RessourceGroup
 {
@@ -120,7 +136,7 @@ $global:AzureRgroupList = Get-AzureRmResourceGroup
 $Counter = 0
 Write-Menu-Header "ressource group Select"
 
-foreach ($Rgroup in $global:AzureRgroup) {
+foreach ($Rgroup in $global:AzureRgroupList) {
    Write-Host $Counter " Ressource Groupe :" $Rgroup.ResourceGroupName
    $counter++
  }
@@ -135,6 +151,9 @@ foreach ($Rgroup in $global:AzureRgroup) {
 function Create-StorageAccount
 {
 Select-RessourceGroup
+
+
+$StorageAccount = New-AzureRmStorageAccount -StorageAccountName $StorageAccountName -Type 'Standard_LRS' -ResourceGroupName $StorageResourceGroupName -Location "$ResourceGroupLocation"
 
 
 
@@ -170,4 +189,10 @@ New-AzureRmResourceGroup -Name $resourceGroup -Location $location
 }
 
 
-Set-AzureSession
+#Set-AzureSession
+Write-Host "Please Wait until gathring of azure location is finished"
+$Global:AzureListLocations = Get-AzureRmLocation
+
+
+Set-AsureLocation
+Select-RessourceGroup
