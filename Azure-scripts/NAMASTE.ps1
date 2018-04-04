@@ -8,63 +8,20 @@
 # Operating system : Windows 10 or windows server 2016            #
 ###################################################################
 # Configuration itrmps
+$ScriptDirectory = Split-Path -Path $MyInvocation.MyCommand.Definition -Parent
+try {
+    . ("$ScriptDirectory\ressources\Namaste-core.ps1")
+}
+catch {
+    Write-Host "Error while loading supporting PowerShell Scripts" 
+}
+
 $XmlConfigFile = "D:\arnau\Documents\GitHub\CAST-Windows\Azure-scripts\XmlTemplate.xml"
 $Global:subscriptionId = ""
-$SessionState = fasle 
+$Tab = [char]9
 
 # Loadin basic configuration file ( profile and parameter for build)
 [xml]$XmlDocument = Get-Content -Path $XmlConfigFile
-
-function Write-Menu-Header 
-{
- param (
-        [string]$Title = 'My Menu'
-    )
-   Clear-Host
-    Write-Host "================ $Title ================"
-    Write-Host ""
- }   
-
-function Put-Spacer
-{
-Write-Host ""
-Write-Host "------------------------------------------------"
-Write-Host ""
-}
-
-function EnterToContinue
-{
- param (
-        [string]$Value = 'Dummy'
-    )
- 
- Put-Spacer
- Write-Host "you choose : [ $Value ] "
- Put-Spacer
- $dummy = Read-Host -Prompt 'Press enter to continue or CTRL+C to end'
- Clear-Host
- }
-
-
-function Main
-{
-Write-Menu-Header "What did you want to do now ?"
-Put-Spacer
-Write-Host "1  Build new azure elements..."
-Write-Host "2  Delete Some azure elements..."
-Write-Host "3  List some elements..."
-Write-Host "Q: Press 'Q' to quit."
-Put-Spacer
-$selection = Read-Host "Please make a selection"
-     switch ($selection)
-     {
-         '1' { $Global:CertDuration = '1'} 
-         '2' { $Global:CertDuration = '3'}
-         '3' { $Global:CertDuration = '6'}
-         'Q' { exit 0 }
-     }
-EnterToContinue $Global:CertDuration
-}
 
 function Main
 {
@@ -112,46 +69,13 @@ $selection = Read-Host "Please make a selection"
 EnterToContinue $Global:CertDuration
 }
 
-function Set-AsureLocation
-{
-$Counter = 0
-Write-Menu-Header "Azure Location Select"
-
-foreach ($AzLocation in $Global:AzureListLocations ) {
-   Write-Host $Counter " Azure Location :" $AzLocation.DisplayName
-   $counter++
- }
- Put-Spacer
- $ItmVal = Read-Host -Prompt 'Select a Location'
- $Global:AzureSelectedLocationsDName = $Global:AzureListLocations.Item($ItmVal).DisplayName
- $Global:AzureSelectedLocationsName = $Global:AzureListLocations.Item($ItmVal).Location
- EnterToContinue $Global:AzureSelectedLocationsName
-}
-
-function Select-RessourceGroup
-{
-$global:AzureRgroupList = Get-AzureRmResourceGroup
-$Counter = 0
-Write-Menu-Header "ressource group Select"
-
-foreach ($Rgroup in $global:AzureRgroupList) {
-   Write-Host $Counter " Ressource Groupe :" $Rgroup.ResourceGroupName
-   $counter++
- }
- Put-Spacer
- $ItmVal = Read-Host -Prompt 'Select a ressource group'
- $global:AzureRgroupName = $global:AzureRgroupList.Item($ItmVal).ResourceGroupName
- $global:AzureRgroup = Get-AzureRmResourceGroup -name $global:AzureRgroupName
- EnterToContinue $global:AzureRgroupName
-}
-
 function Create-StorageAccount
 {
 param (
         $Automated = 'manuel'
     )
 if ($Automated -eq 'manuel' ) { Select-RessourceGroup
-Set-StorageAccountRedundency
+Select-SorageAccRedudency
 write-host "Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."
 $StorageAccountName = Read-Host -Prompt 'give name of new Storage Account' } else  { Write-Host "Automate mode" }
 
@@ -166,11 +90,48 @@ $StorageAccount = New-AzureRmStorageAccount -StorageAccountName $StorageAccountN
 
 }
 
-function Set-StorageAccountRedundency 
+function Create-inRgroup 
 {
-$global:AzureStorageAccountRedundencyList = $XmlDocument.RootManagment.ManagedElement.StorageAccountRedudency.StoAccRed
+$resourceGroupNAme = Read-Host -Prompt 'give name of new ressource group'
+Select-AzureLocation
+$Global:AzureSelectedLocationsName
+Create-Rgroup "$resourceGroupNAme" "$Global:AzureSelectedLocationsName"
+
+}
+
+function Create-Rgroup 
+{
+(
+        [string]$resourceGroupNAme
+    )
+    Write-Host "Ressource group name     : " $resourceGroupNAme
+    Write-Host "Ressource group location : " $Global:AzureSelectedLocationsName
+New-AzureRmResourceGroup -Name $resourceGroupNAme -Location $Global:AzureSelectedLocationsName
+
+}
+
+
+
+Function Create-Vnet
+{
+(
+        [string]$VnetRange
+    )
+    $VnetBrange =  $VnetBrange + ".0/24"
+# Create a subnet configuration
+$subnetConfig = New-AzureRmVirtualNetworkSubnetConfig -Name default -AddressPrefix $VnetBrange
+
+# Create a virtual network
+$vnet = New-AzureRmVirtualNetwork -ResourceGroupName $resourceGroup -Location $location  -Name MYvNET -AddressPrefix -Subnet $subnetConfig
+
+
+}
+
+function set-newBubble 
+{
+$global:AzureGlobalBtype = $XmlDocument.RootManagment.ManagedElement.StorageAccountRedudency.StoAccRed
 $Counter = 0
-Write-Menu-Header "Storage account redundency Select"
+Write-Menu-Header "Please select what kind of bubble we sill deploy"
 
 foreach ($RedLev in $global:AzureStorageAccountRedundencyList) {
    Write-Host $Counter " Level :" $RedLev.Name
@@ -181,41 +142,20 @@ foreach ($RedLev in $global:AzureStorageAccountRedundencyList) {
  $global:AzureStorageAccountRedundency = $global:AzureStorageAccountRedundencyList.Item($ItmVal).AzureNAme
  EnterToContinue $global:AzureStorageAccountRedundencyList.Item($ItmVal).Name
 
+
+
 }
 
 
 
-
-$XmlDocument.RootManagment.TypePf.Rgroups.obj  
-
-function Set-AzureSession 
-{
-# Sign-in with Azure account credentials
-
-Login-AzureRmAccount
-
-# Select Azure Subscription
-
-$Global:subscriptionId = (Get-AzureRmSubscription |  Out-GridView ` -Title "Select an Azure Subscription ..." ` -PassThru).SubscriptionId
-
-Select-AzureRmSubscription  -SubscriptionId $Global:subscriptionId
-
-}
-
-
-function Create-Rgroup 
-{
-
-New-AzureRmResourceGroup -Name $resourceGroup -Location $location
-
-}
 
 ## OK VALIDE
 #Set-AzureSession
 Write-Host "Please Wait until gathring of azure location is finished"
 $Global:AzureListLocations = Get-AzureRmLocation
-#Set-AsureLocation
-Create-StorageAccount manuel 
+Select-AzureLocation
+#Create-StorageAccount manuel 
+# Create-inRgroup
 
 #Create-StorageAccount
-
+#Select-VmSize
