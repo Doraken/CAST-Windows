@@ -1,0 +1,34 @@
+﻿<Project Synchronized="False" SyncFilter="*.ps1;*.psm1;*.psd1;*.ps1xml;*.psf;*.pss;*.xml;*.help.txt">
+  <Version>2.0</Version>
+  <FileID>e1ae4b0e-b6a0-4c55-bcb4-eca8c3213f76</FileID>
+  <ProjectType>2</ProjectType>
+  <Folders>
+    <Folder>Ressources</Folder>
+    <Folder>Ressources\Azure</Folder>
+    <Folder>Ressources\IIS</Folder>
+    <Folder>Ressources\Menu</Folder>
+    <Folder>bin</Folder>
+    <Folder>Logs</Folder>
+    <Folder>config</Folder>
+    <Folder>inits</Folder>
+  </Folders>
+  <Files>
+    <File Build="1">.gitignore</File>
+    <File Build="2" Shared="False">Create-AzSession.ps1</File>
+    <File Build="2" Shared="False">Create-Rgroup.ps1</File>
+    <File Build="2" Shared="False">ManageCertificates.ps1</File>
+    <File Build="2" Shared="False">NAMASTE.ps1</File>
+    <File Build="2" Shared="False">Ressources\Azure\Cast-azure.psm1.ps1</File>
+    <File Build="2" Shared="False">bin\Namaste.ps1</File>
+    <File Build="2" Shared="False">Ressources\Cast-core.ps1</File>
+    <File Build="2" Shared="False">Ressources\Cast-Display.ps1</File>
+    <File Build="2" Shared="False">Ressources\Menu\Namaste-menu.ps1</File>
+    <File Build="2" Shared="False">Ressources\Menu\Azure-menu.ps1</File>
+    <File Build="2" Shared="False">Ressources\Cast-log.ps1</File>
+    <File Build="2" Shared="False">Ressources\Menu\Cast-Menu.ps1</File>
+    <File Build="2" Shared="False">inits\Cast-SrcMaker.ps1</File>
+    <File Build="2">config\generic.xml</File>
+  </Files>
+  <DeployMode>Project</DeployMode>
+  <PrimaryFile></PrimaryFile>
+</Project>

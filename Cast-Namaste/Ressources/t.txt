@@ -1,0 +1,25 @@
+Write-Host "You are executing Namaste from : $ScriptDirectory"
+try
+{
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Create-AzSession.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Create-Rgroup.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\ManageCertificates.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\NAMASTE.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\bin\Namaste.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\ExportedTemplate-SopAzureRg\deploy.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Cast-core.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Cast-Display.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Cast-log.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Cast-SrcMaker.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Azure\Cast-azure.psm1.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Menu\Azure-menu.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Menu\Cast-Menu.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressources\Menu\Namaste-menu.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressourcesa\Namaste-core.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressourcesa\Namaste-print.ps1")
+. ("D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste\Ressourcesa\azure\Sans titre3.ps1")
+}
+catch
+{
+	Write-Host "Error while loading supporting PowerShell Scripts"
+}

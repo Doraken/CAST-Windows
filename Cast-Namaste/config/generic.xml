@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="windows-1251" ?>
+<RootConfig>
+	<ScriptEnvVars>
+		<BasePath>D:\arnau\Documents\GitHub\CAST-Windows\Cast-Namaste</BasePath>
+		<SubDirs>
+			<CentralConfigfDir>config</CentralConfigfDir>
+			<CentralLibDir>Ressources</CentralLibDir>
+			<CentralDataDir>data</CentralDataDir>
+			<CentralLogDir>Logs</CentralLogDir>
+		</SubDirs>
+		<Inits>inits/Cast-SrcMaker.ps1</Inits>
+	</ScriptEnvVars>
+	<GlobalParam>
+		<Region>West Europe</Region>
+	</GlobalParam>
+	
+	<ManagedElement>
+		<Location>
+			<Loc Name="Westen europe" AzureNAme="weurope" />
+		</Location>
+		<StorageAccountRedudency>
+			<StoAccRed AzureNAme="Standard_LRS"   Name="Locally-redundant storage."         />
+			<StoAccRed AzureNAme="Standard_ZRS"   Name="Zone-redundant storage."            />
+			<StoAccRed AzureNAme="Standard_GRS"   Name="Geo-redundant storage."             />
+			<StoAccRed AzureNAme="Standard_RAGRS" Name="Read access geo-redundant storage"  />
+			<StoAccRed AzureNAme="Premium_LRS"    Name="Premium locally-redundant storage." />
+		</StorageAccountRedudency>
+	</ManagedElement>
+</RootConfig>

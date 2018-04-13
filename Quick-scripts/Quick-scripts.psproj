@@ -1,0 +1,12 @@
+﻿<Project Synchronized="False" SyncFilter="*.ps1;*.psm1;*.psd1;*.ps1xml;*.psf;*.pss;*.xml;*.help.txt">
+  <Version>2.0</Version>
+  <FileID>e3672151-b950-4412-abac-3706eeb19c7f</FileID>
+  <ProjectType>0</ProjectType>
+  <Folders />
+  <Files>
+    <File Build="0">Startup.pss</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-Gen-Password_ps1">Gen-Password.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-ManageCertificates_ps1">ManageCertificates.ps1</File>
+    <File Build="0" Shared="False" ReferenceFunction="Invoke-IIS-SilentInstall_ps1">IIS-SilentInstall.ps1</File>
+  </Files>
+</Project>
