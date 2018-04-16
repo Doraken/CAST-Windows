@@ -22,9 +22,9 @@ function Write-Menu-Header
  param (
         [string]$Title = 'My Menu'
     )
-   Clear-Host
-    Write-Host "================ $Title ================"
-    Write-Host ""
+    Clear-Host
+    Write-Host "================ $Title ================" -ForegroundColor Green
+    Write-Host ""                                         -ForegroundColor Green
  }   
 
 <#
@@ -49,7 +49,7 @@ Write-Host ""
 
 <#
 	.SYNOPSIS
-		this functiàon is used to create a généric stop point with potentialy tunned display.
+		this function is used to create a généric stop point with potentialy tunned display.
 	
 	.DESCRIPTION
 		May print a value of a selected var ( passed as arg on call) and wait an enter key hit to continue.

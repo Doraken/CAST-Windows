@@ -41,7 +41,7 @@ function Set-AzureSession
 	$Global:subscriptionId = (Get-AzureRmSubscription | Out-GridView ` -Title "Select an Azure Subscription ..." ` -PassThru).SubscriptionId
 		
 		Select-AzureRmSubscription -SubscriptionId $Global:subscriptionId
-	}
+	
 	
 }
 

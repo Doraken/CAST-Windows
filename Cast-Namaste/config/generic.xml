@@ -8,7 +8,7 @@
 			<CentralDataDir>data</CentralDataDir>
 			<CentralLogDir>Logs</CentralLogDir>
 		</SubDirs>
-		<Inits>inits/Cast-SrcMaker.ps1</Inits>
+		<Inits>inits\Cast-SrcMaker.ps1</Inits>
 	</ScriptEnvVars>
 	<GlobalParam>
 		<Region>West Europe</Region>

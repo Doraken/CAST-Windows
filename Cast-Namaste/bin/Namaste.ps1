@@ -24,23 +24,23 @@ $XmlConfigFile = "$ScriptDirectory\..\config\generic.xml"
 
 # Gathering base directory definitions
 $Global:CastBasePath = $XmlDocument.RootConfig.ScriptEnvVars.BasePath
-$Global:CastLogPath = $Global:CastBasePath + "\" + $XmlDocument.RootConfig.ScriptEnvVars.SubDirs.CentralLogDir
+$Global:CastLogPath  = $Global:CastBasePath + "\" + $XmlDocument.RootConfig.ScriptEnvVars.SubDirs.CentralLogDir
 $Global:CastDataPath = $Global:CastBasePath + "\" + $XmlDocument.RootConfig.ScriptEnvVars.SubDirs.CentralDataDir
-$Global:CastLibPath = $Global:CastBasePath + "\" + $XmlDocument.RootConfig.ScriptEnvVars.SubDirs.CentralLibDir
+$Global:CastLibPath  = $Global:CastBasePath + "\" + $XmlDocument.RootConfig.ScriptEnvVars.SubDirs.CentralLibDir
 
 # Gathering generated fil for sourcing duty
-$Global:Sfile = $Global:CastLibPath + "\" + $XmlDocument.RootConfig.ScriptEnvVars.SourcingFile
+$Global:Sfile = $Global:CastBasePath + "\" + $XmlDocument.RootConfig.ScriptEnvVars.Inits
 Clear-Host
-Write-Host "Root script directory	  : $Global:CastBasePath"
-Write-Host "Log directory 		  : $Global:CastLogPath"
-Write-Host "Lib directory 		  : $Global:CastLibPath"
-Write-Host "Data directory 		  : $Global:CastDataPath"
-write-host "Generated fil for lib sourcing : $Global:Sfile"
+Write-Host "Root script directory		   : $Global:CastBasePath"
+Write-Host "Log directory 		           : $Global:CastLogPath"
+Write-Host "Lib directory 		           : $Global:CastLibPath"
+Write-Host "Data directory 		           : $Global:CastDataPath"
+write-host "Sourcing Engine                : $Global:Sfile"
 
 Write-Host "Sourcing base CAST engine : $Global:Sfile"
 try
 {
-	. ("$Global:CastGenSrc")
+	. ("$Global:Sfile")
 }
 catch
 {
