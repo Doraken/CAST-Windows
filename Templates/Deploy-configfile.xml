@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="windows-1251" ?>
+<RootConfig>
+	<ScriptEnvVars>
+		<BasePath> </BasePath>
+		<SubDirs>
+			<CentralConfigfDir>config</CentralConfigfDir>
+			<CentralLibDir>Ressources</CentralLibDir>
+			<CentralDataDir>data</CentralDataDir>
+			<CentralLogDir>Logs</CentralLogDir>
+		</SubDirs>
+	</ScriptEnvVars>
+	<MiddleWare>
+		<Tomcat>
+			<InstallPathj>	</InstallPathj>
+			<JrePath>   </JrePath>
+		<Components>
+			<Element id='1' > </Element>
+			<Element id='2' > </Element>
+			<Element id='3' > </Element>
+			<Element id='4' > </Element>
+		</Components>
+		<ListenPort>
+			<ServerShutDownPort>8005</ServerShutDownPort>
+			<HttpConnectorPort>8080</HttpConnectorPort>
+			<AjpConnectorPort>8009</AjpConnectorPort>
+		</ListenPort>
+		<ServiceName>Tomcat</ServiceName>
+		
+		</Tomcat>
+	</MiddleWare>
+</RootConfig>

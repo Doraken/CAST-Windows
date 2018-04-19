@@ -50,7 +50,7 @@ param
     $row.Sourced_Lib = "$ShorFile" 
 
 
-    Clear-Host
+    #Clear-Host
 
 	#Write-Host "Soucing file : [ $ShorFile ] $Tab $Tab $Tab $Tab" -NoNewline
 

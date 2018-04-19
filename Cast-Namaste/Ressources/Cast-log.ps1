@@ -13,6 +13,16 @@
 		this file contain all log functions.
 #>
 
+
+function Set-LogFile 
+{
+
+
+
+}
+
+
+
 function MsgDisplay
 {
 	Param
@@ -32,9 +42,11 @@ function MsgDisplay
 		'3' { $MessageColor = "Yellow -BackgroundColor DarkGreen"}
 		'4' { $MessageColor = "Red" }
 	}
+
 	Write-Host "$MessageVar" -ForegroundColor $MessageColor
 	if ( $Êmergency = $true ) { Write-Host "Je vais sortire", exit $TypeMsgVar}
 	
 	
 }
 
+MsgDisplay ("ceci est un message de test vert")   ("1")  ($false)

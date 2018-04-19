@@ -60,7 +60,7 @@ function test-CAST-LOG-MsgDisplay
 
 function test-CAST-LOG-MsgDisplay
 {
-	MsgDisplay "ceci est un message de test vert"   "1"  $false
+	MsgDisplay ("ceci est un message de test vert")   ("1")  ($false)
 	MsgDisplay "ceci est un message de test jaune"  "2"  $false
 	MsgDisplay "ceci est un message de test orange" "3"  $false
 	MsgDisplay "ceci est un message de test rouge"  "4"  $false
@@ -84,3 +84,4 @@ function lauch-test
 	test-CAST-DISPLAY-Write-Menu-Header
 }
 
+lauch-test

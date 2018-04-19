@@ -45,7 +45,105 @@ function Set-AzureSession
 	
 }
 
+
+
+
+
+<#
+	.SYNOPSIS
+		This function check if you have a currently opened session to Azure cloud portal
+	
+	.DESCRIPTION
+        If you don't have any opened session on Azure cloud tgis function will lauchent Azure session creation procedur. 
+        Warning , if you session if expired or invalidate , this check can fail.		
+
+	.EXAMPLE
+		PS C:\> Get-AzureSessionState
+	
+	.NOTES
+		No any parametter is needed , and it can launch session opener if needed 
+#>
 function Get-AzureSessionState
 {
-	if ($global:LocalAzureSession = $null) { Set-AzureSession} else { Write-Host "You already have a seted session "}
+	if ($global:LocalAzureSession = $null) { Set-AzureSession} else { Write-Host "You already have a seted session " -ForegroundColor Green}
+}
+
+
+
+function Select-RessourceGroup
+{
+AzureSessionState
+$global:AzureRgroupList = Get-AzureRmResourceGroup
+$Counter = 0
+Write-Menu-Header "ressource group Select"
+
+foreach ($Rgroup in $global:AzureRgroupList) {
+   Write-Host $Counter " Ressource Groupe :" $Rgroup.ResourceGroupName
+   $counter++
+ }
+ Put-Spacer
+ $ItmVal = Read-Host -Prompt 'Select a ressource group'
+ $global:AzureRgroupName = $global:AzureRgroupList.Item($ItmVal).ResourceGroupName
+ $global:AzureRgroup = Get-AzureRmResourceGroup -name $global:AzureRgroupName
+ EnterToContinue $global:AzureRgroupName
+}
+
+
+function Select-SorageAccRedudency 
+{
+AzureSessionState
+$global:AzureStorageAccountRedundencyList = $XmlDocument.RootManagment.ManagedElement.StorageAccountRedudency.StoAccRed
+$Counter = 0
+Write-Menu-Header "Storage account redundency Select"
+
+foreach ($RedLev in $global:AzureStorageAccountRedundencyList) {
+   Write-Host $Counter " Level :" $RedLev.Name
+   $counter++
+ }
+ Put-Spacer
+ $ItmVal = Read-Host -Prompt 'Select a redundency Level'
+ $global:AzureStorageAccountRedundency = $global:AzureStorageAccountRedundencyList.Item($ItmVal).AzureNAme
+ EnterToContinue $global:AzureStorageAccountRedundencyList.Item($ItmVal).Name
+
+}
+
+function Select-VmSize
+{
+AzureSessionState
+$AzureVmSizes = Get-AzureRmVMSize -Location $Global:AzureSelectedLocationsName 
+Write-Menu-Header "Storage account redundency Select"
+$Counter = 0
+foreach ($AVmSize in $AzureVmSizes) {
+   $Memory = $AVmSize.MemoryInMB / 1024
+   Write-Host $Counter "$Tab Level :" $AVmSize.Name "$Tab with " $AVmSize.NumberOfCores "$Tab core(s) and "$Tab $Memory "Go of memory"
+   $counter++
+ }
+ Put-Spacer
+ $ItmVal = Read-Host -Prompt 'Select a redundency Level'
+ $global:AzureVMSize = $AzureVmSizes.Item($ItmVal).Name
+ EnterToContinue $global:AzureVMSize
+}
+
+function Select-AzureLocation
+{
+$Counter = 0
+Write-Menu-Header "Azure Location Select"
+
+foreach ($AzLocation in $Global:AzureListLocations ) {
+   Write-Host $Counter " Azure Location :" $AzLocation.DisplayName
+   $counter++
+ }
+ Put-Spacer
+ $ItmVal = Read-Host -Prompt 'Select a Location'
+ $Global:AzureSelectedLocationsDName = $Global:AzureListLocations.Item($ItmVal).DisplayName
+ $Global:AzureSelectedLocationsName = $Global:AzureListLocations.Item($ItmVal).Location
+ EnterToContinue $Global:AzureSelectedLocationsName
+}
+
+
+function Set-NewAzureVm
+{
+
+
+
 }
