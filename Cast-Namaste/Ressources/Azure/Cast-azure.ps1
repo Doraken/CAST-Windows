@@ -141,6 +141,27 @@ foreach ($AzLocation in $Global:AzureListLocations ) {
 }
 
 
+function Create-StorageAccount
+{
+param (
+        $Automated = 'manuel'
+    )
+if ($Automated -eq 'manuel' ) { Select-RessourceGroup
+Select-SorageAccRedudency
+write-host "Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only."
+$StorageAccountName = Read-Host -Prompt 'give name of new Storage Account' } else  { Write-Host "Automate mode" }
+
+write-host "Storage Account Name :" $StorageAccountName
+Write-Host "Type                 :" $global:AzureStorageAccountRedundency
+write-host "Resource Group Name  :" $global:AzureRgroup.ResourceGroupName
+write-host "Location             :" $global:AzureRgroup.Location 
+
+EnterToContinue ""
+
+$StorageAccount = New-AzureRmStorageAccount -StorageAccountName $StorageAccountName -Type $global:AzureStorageAccountRedundency -ResourceGroupName $global:AzureRgroup.ResourceGroupName -Location $global:AzureRgroup.Location
+
+}
+
 function Set-NewAzureVm
 {
 

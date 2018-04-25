@@ -17,7 +17,7 @@
 			<Element id='1' > </Element>
 			<Element id='2' > </Element>
 			<Element id='3' > </Element>
-			<Element id='4' > </Element>
+			<Element id=4 > </Element>
 		</Components>
 		<ListenPort>
 			<ServerShutDownPort>8005</ServerShutDownPort>
